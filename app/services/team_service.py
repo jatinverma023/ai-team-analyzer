@@ -24,7 +24,15 @@ def generate_ai_explanation(team, ml_score):
 
     return " ".join(explanation)
 
-def generate_teams_logic(students, team_size: int):
+def generate_teams_logic(students, team_size: int = None, num_teams: int = None):
+    """Generate balanced teams using snake-draft distribution.
+    
+    Args:
+        students: List of student dicts
+        team_size: Target members per team (mode='size')
+        num_teams: Exact number of teams to create (mode='count')
+        Only one should be provided; team_size takes priority if both given.
+    """
     # Calculate total score
     for student in students:
         student["total_score"] = (
@@ -37,7 +45,19 @@ def generate_teams_logic(students, team_size: int):
 
     students.sort(key=lambda x: x["total_score"], reverse=True)
 
-    num_teams = math.ceil(len(students) / team_size)
+    # Calculate number of teams based on mode
+    if num_teams and not team_size:
+        # Mode: "count" — teacher chose how many teams
+        num_teams = min(num_teams, len(students))  # can't have more teams than students
+        team_size = math.ceil(len(students) / num_teams)
+    elif team_size:
+        # Mode: "size" — teacher chose members per team
+        num_teams = math.ceil(len(students) / team_size)
+    else:
+        # Fallback
+        team_size = 3
+        num_teams = math.ceil(len(students) / team_size)
+
     if num_teams == 0:
         num_teams = 1
         

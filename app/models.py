@@ -56,7 +56,9 @@ class CompatibilityRequest(BaseModel):
     student_ids: List[str]
 
 class TeamGenerationRequest(BaseModel):
-    team_size: int
+    team_size: Optional[int] = None
+    num_teams: Optional[int] = None
+    mode: str = "size"  # "size" or "count"
 
 class TeamFeedbackRequest(BaseModel):
     team_id: str

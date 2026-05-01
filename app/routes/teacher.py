@@ -1,3 +1,4 @@
+import math
 from datetime import datetime, timezone
 
 from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException
@@ -79,15 +80,25 @@ async def generate_teams(
     if not students:
         raise HTTPException(status_code=404, detail="No students found")
 
-    team_size = request.team_size
-
-    if team_size <= 0:
-        raise HTTPException(status_code=400, detail="Invalid team size")
-
-    if len(students) < team_size:
-        raise HTTPException(status_code=400, detail="Not enough students")
-
-    analyzed_teams, num_teams = generate_teams_logic(students, team_size)
+    # Determine mode and validate
+    if request.mode == "count":
+        if not request.num_teams or request.num_teams <= 0:
+            raise HTTPException(status_code=400, detail="Invalid number of teams")
+        if request.num_teams > len(students):
+            raise HTTPException(status_code=400, detail="More teams than students")
+        analyzed_teams, num_teams = generate_teams_logic(
+            students, num_teams=request.num_teams
+        )
+        team_size = math.ceil(len(students) / num_teams)
+    else:
+        team_size = request.team_size or 3
+        if team_size <= 0:
+            raise HTTPException(status_code=400, detail="Invalid team size")
+        if len(students) < team_size:
+            raise HTTPException(status_code=400, detail="Not enough students")
+        analyzed_teams, num_teams = generate_teams_logic(
+            students, team_size=team_size
+        )
 
     result = await teams_collection.insert_one(
         {

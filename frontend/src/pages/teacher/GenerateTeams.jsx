@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { 
   Users, Brain,
   Settings2, Sparkles, ShieldCheck, Filter,
-  RefreshCw
+  RefreshCw, Hash, Layers
 } from 'lucide-react';
 import PageLayout from '../../components/PageLayout';
 import TeamCard from '../../components/TeamCard';
@@ -11,17 +11,23 @@ import api from '../../api/axios';
 import toast from 'react-hot-toast';
 
 export default function GenerateTeams() {
+  const [mode, setMode] = useState('size'); // 'size' or 'count'
   const [teamSize, setTeamSize] = useState(3);
+  const [numTeams, setNumTeams] = useState(2);
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState(null);
   const [expanded, setExpanded] = useState(null);
 
   const handleGenerate = async () => {
-    if (teamSize < 2) return toast.error('Team size must be at least 2');
+    if (mode === 'size' && teamSize < 2) return toast.error('Team size must be at least 2');
+    if (mode === 'count' && numTeams < 1) return toast.error('Need at least 1 team');
     setLoading(true);
     setResult(null);
     try {
-      const res = await api.post('/teacher/generate-teams', { team_size: teamSize });
+      const payload = mode === 'size'
+        ? { mode: 'size', team_size: teamSize }
+        : { mode: 'count', num_teams: numTeams };
+      const res = await api.post('/teacher/generate-teams', payload);
       setResult(res.data);
       toast.success(`Successfully calibrated ${res.data.total_teams} teams!`);
     } catch (err) {
@@ -31,7 +37,9 @@ export default function GenerateTeams() {
     }
   };
 
-  const confidence = Math.min(90 + teamSize, 99);
+  const confidence = mode === 'size' 
+    ? Math.min(90 + teamSize, 99) 
+    : Math.min(88 + numTeams * 2, 99);
 
   return (
     <PageLayout>
@@ -65,33 +73,86 @@ export default function GenerateTeams() {
 
           <div className="space-y-6">
 
-            {/* SLIDER */}
+            {/* MODE TOGGLE */}
             <div>
-              <div className="flex justify-between mb-3 text-xs font-black text-slate-400 uppercase">
-                <span>Team Size</span>
-                <span className="text-blue-600">{teamSize} Members</span>
+              <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3">Formation Mode</p>
+              <div className="grid grid-cols-2 gap-2">
+                <button
+                  onClick={() => setMode('size')}
+                  className={`flex items-center justify-center gap-2 h-12 rounded-2xl text-xs font-black transition-all ${
+                    mode === 'size'
+                      ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/20'
+                      : 'bg-slate-50 text-slate-500 hover:bg-slate-100'
+                  }`}
+                >
+                  <Layers size={14} /> By Size
+                </button>
+                <button
+                  onClick={() => setMode('count')}
+                  className={`flex items-center justify-center gap-2 h-12 rounded-2xl text-xs font-black transition-all ${
+                    mode === 'count'
+                      ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/20'
+                      : 'bg-slate-50 text-slate-500 hover:bg-slate-100'
+                  }`}
+                >
+                  <Hash size={14} /> By Count
+                </button>
               </div>
+            </div>
 
-              <input
-                type="range"
-                min={2}
-                max={10}
-                value={teamSize}
-                onChange={e => setTeamSize(parseInt(e.target.value))}
-                className="w-full h-2 bg-gradient-to-r from-blue-100 to-blue-500 rounded-lg appearance-none cursor-pointer"
-              />
-
-              {/* LIVE TEAM PREVIEW */}
-              <div className="flex gap-2 mt-4">
-                {Array.from({ length: teamSize }).map((_, i) => (
-                  <div 
-                    key={i}
-                    className="w-8 h-8 rounded-lg bg-gradient-to-tr from-blue-500 to-indigo-600 text-white flex items-center justify-center text-xs font-bold shadow"
-                  >
-                    {i + 1}
+            {/* SLIDER — changes based on mode */}
+            <div>
+              {mode === 'size' ? (
+                <>
+                  <div className="flex justify-between mb-3 text-xs font-black text-slate-400 uppercase">
+                    <span>Members Per Team</span>
+                    <span className="text-blue-600">{teamSize} Members</span>
                   </div>
-                ))}
-              </div>
+                  <input
+                    type="range"
+                    min={2}
+                    max={10}
+                    value={teamSize}
+                    onChange={e => setTeamSize(parseInt(e.target.value))}
+                    className="w-full h-2 bg-gradient-to-r from-blue-100 to-blue-500 rounded-lg appearance-none cursor-pointer"
+                  />
+                  <div className="flex gap-2 mt-4">
+                    {Array.from({ length: teamSize }).map((_, i) => (
+                      <div 
+                        key={i}
+                        className="w-8 h-8 rounded-lg bg-gradient-to-tr from-blue-500 to-indigo-600 text-white flex items-center justify-center text-xs font-bold shadow"
+                      >
+                        {i + 1}
+                      </div>
+                    ))}
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div className="flex justify-between mb-3 text-xs font-black text-slate-400 uppercase">
+                    <span>Number of Teams</span>
+                    <span className="text-blue-600">{numTeams} Teams</span>
+                  </div>
+                  <input
+                    type="range"
+                    min={1}
+                    max={10}
+                    value={numTeams}
+                    onChange={e => setNumTeams(parseInt(e.target.value))}
+                    className="w-full h-2 bg-gradient-to-r from-violet-100 to-violet-500 rounded-lg appearance-none cursor-pointer"
+                  />
+                  <div className="flex gap-2 mt-4">
+                    {Array.from({ length: numTeams }).map((_, i) => (
+                      <div 
+                        key={i}
+                        className="w-8 h-8 rounded-lg bg-gradient-to-tr from-violet-500 to-purple-600 text-white flex items-center justify-center text-xs font-bold shadow"
+                      >
+                        T{i + 1}
+                      </div>
+                    ))}
+                  </div>
+                </>
+              )}
             </div>
 
             {/* AI INSIGHT */}
@@ -102,9 +163,12 @@ export default function GenerateTeams() {
               </div>
 
               <p className="text-xs font-bold text-blue-900/70">
-                {teamSize <= 3 && "Small teams → fast execution & ownership."}
-                {teamSize > 3 && teamSize <= 6 && "Balanced teams → best collaboration."}
-                {teamSize > 6 && "Larger teams → diverse skills but coordination needed."}
+                {mode === 'size' && teamSize <= 3 && "Small teams → fast execution & ownership."}
+                {mode === 'size' && teamSize > 3 && teamSize <= 6 && "Balanced teams → best collaboration."}
+                {mode === 'size' && teamSize > 6 && "Larger teams → diverse skills but coordination needed."}
+                {mode === 'count' && numTeams <= 2 && "Few teams → larger groups with more diversity."}
+                {mode === 'count' && numTeams > 2 && numTeams <= 5 && "Moderate split → good balance of size and count."}
+                {mode === 'count' && numTeams > 5 && "Many teams → smaller focused groups."}
               </p>
 
               {/* CONFIDENCE BAR */}
