@@ -1,4 +1,5 @@
 import random
+import math
 from app.ml_service import predict_team_score
 
 def generate_ai_explanation(team, ml_score):
@@ -36,7 +37,7 @@ def generate_teams_logic(students, team_size: int):
 
     students.sort(key=lambda x: x["total_score"], reverse=True)
 
-    num_teams = len(students) // team_size
+    num_teams = math.ceil(len(students) / team_size)
     if num_teams == 0:
         num_teams = 1
         
