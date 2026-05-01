@@ -1,0 +1,61 @@
+# ========================
+# Python
+# ========================
+venv/
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+dist/
+build/
+.eggs/
+*.egg
+
+# ========================
+# Environment & Secrets
+# ========================
+.env
+.env.local
+.env.production
+.env.*.local
+
+# ========================
+# ML Artifacts (auto-generated)
+# ========================
+ml/*.pkl
+
+# ========================
+# Node / Frontend
+# ========================
+frontend/node_modules/
+frontend/dist/
+frontend/.vite/
+node_modules/
+
+# ========================
+# OS Files
+# ========================
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+
+# ========================
+# IDE / Editor
+# ========================
+.vscode/
+.idea/
+*.code-workspace
+
+# ========================
+# Logs
+# ========================
+*.log
+npm-debug.log*
+
+# ========================
+# Misc
+# ========================
+TODO.md
