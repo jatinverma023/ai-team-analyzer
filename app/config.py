@@ -9,8 +9,18 @@ class Settings(BaseSettings):
     JWT_SECRET: str = "supersecret"
     ALGORITHM: str = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 60
-    ALLOWED_ORIGINS: List[str] = ["http://localhost:5173", "http://localhost:5174", "http://localhost:8000"]
+    ALLOWED_ORIGINS: List[str] = [
+        "http://localhost:5173",
+        "http://localhost:5174",
+        "http://localhost:8000",
+    ]
     
-    model_config = SettingsConfigDict(env_file=str(BASE_DIR / ".env"), extra="ignore")
+    model_config = SettingsConfigDict(
+        env_file=str(BASE_DIR / ".env"),
+        extra="ignore",
+        # Render passes ALLOWED_ORIGINS as a comma-separated string
+        # Pydantic v2 can parse JSON arrays from env, but for a simple
+        # comma-separated list we handle it with a validator below
+    )
 
 settings = Settings()
