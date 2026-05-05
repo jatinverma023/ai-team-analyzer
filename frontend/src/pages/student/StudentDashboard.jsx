@@ -65,7 +65,7 @@ export default function StudentDashboard() {
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between mb-10 gap-4">
         <div>
-          <h1 className="text-3xl font-black text-slate-900 tracking-tight">
+          <h1 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
             Hello, <span className="text-blue-600">{summary?.name?.split(' ')[0] || 'Student'}</span> 👋
           </h1>
           <p className="text-slate-500 font-medium">Here's your performance report for this semester.</p>
@@ -75,7 +75,7 @@ export default function StudentDashboard() {
       {summary ? (
         <div className="space-y-8">
           {/* Key Metrics Grid — all real data, no fake subs */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6">
             <StatCard 
               icon={Activity} 
               label="Overall Score" 
@@ -116,7 +116,7 @@ export default function StudentDashboard() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.4 }}
-              className="lg:col-span-8 bg-white p-8 rounded-[2.5rem] border border-slate-100 shadow-sm"
+              className="lg:col-span-8 bg-white p-4 sm:p-8 rounded-2xl sm:rounded-[2.5rem] border border-slate-100 shadow-sm"
             >
               <div className="flex items-center justify-between mb-8">
                 <div>
@@ -128,7 +128,7 @@ export default function StudentDashboard() {
                 </span>
               </div>
 
-              <div className="h-[340px] w-full">
+              <div className="h-[250px] sm:h-[340px] w-full">
                 <ResponsiveContainer width="100%" height="100%">
                   <AreaChart data={buildProgressData(summary)}>
                     <defs>
@@ -181,7 +181,7 @@ export default function StudentDashboard() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.5 }}
-              className="lg:col-span-4 bg-white p-8 rounded-[2.5rem] border border-slate-100 shadow-sm flex flex-col items-center justify-center text-center"
+              className="lg:col-span-4 bg-white p-4 sm:p-8 rounded-2xl sm:rounded-[2.5rem] border border-slate-100 shadow-sm flex flex-col items-center justify-center text-center"
             >
               <h2 className="text-xl font-bold text-slate-900 mb-1">Skill DNA</h2>
               <p className="text-slate-500 text-sm mb-6">Visual breakdown of core skills</p>
@@ -219,7 +219,7 @@ export default function StudentDashboard() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.6 }}
-              className="lg:col-span-7 bg-white p-8 rounded-[2.5rem] border border-slate-100 shadow-sm"
+              className="lg:col-span-7 bg-white p-4 sm:p-8 rounded-2xl sm:rounded-[2.5rem] border border-slate-100 shadow-sm"
             >
                <h2 className="text-xl font-bold text-slate-900 mb-6">Skills Summary</h2>
                  <div className="space-y-6">
@@ -247,7 +247,7 @@ export default function StudentDashboard() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.7 }}
-              className="lg:col-span-5 grid grid-cols-2 gap-4"
+              className="lg:col-span-5 grid grid-cols-2 gap-3 sm:gap-4"
             >
                {[
                   { to: '/student/team', label: 'My Team', icon: Star, color: 'blue' },

@@ -48,7 +48,7 @@ export default function GenerateTeams() {
           Formation Engine
         </span>
 
-        <h1 className="text-4xl font-black text-slate-900 mt-3">
+        <h1 className="text-2xl sm:text-4xl font-black text-slate-900 mt-3">
           Team <span className="text-blue-600">Architect</span>
         </h1>
 
@@ -57,12 +57,12 @@ export default function GenerateTeams() {
         </p>
       </header>
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-10">
 
         {/* ================= LEFT PANEL ================= */}
         <motion.div 
           whileHover={{ y: -5 }}
-          className="lg:col-span-4 bg-white p-8 rounded-[2.5rem] border border-slate-100 shadow-sm"
+          className="lg:col-span-4 bg-white p-5 sm:p-8 rounded-2xl sm:rounded-[2.5rem] border border-slate-100 shadow-sm"
         >
           <div className="flex items-center gap-3 mb-8">
             <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-600 text-white flex items-center justify-center">
@@ -210,7 +210,7 @@ export default function GenerateTeams() {
           <div className="lg:col-span-8 space-y-6">
 
             {/* STATS */}
-            <div className="flex gap-4">
+            <div className="flex gap-3 sm:gap-4 flex-wrap sm:flex-nowrap">
               {[
                 { label: 'Total Pool', val: result.total_students, icon: Users },
                 { label: 'Teams', val: result.total_teams, icon: ShieldCheck },

@@ -34,7 +34,7 @@ export default function AdminDashboard() {
         </div>
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
-            <h1 className="text-4xl font-black text-slate-900 tracking-tighter">System <span className="text-blue-600">Overview</span></h1>
+            <h1 className="text-2xl sm:text-4xl font-black text-slate-900 tracking-tighter">System <span className="text-blue-600">Overview</span></h1>
             <p className="text-slate-500 mt-2 font-medium">Monitor platform health, users, and ML model performance.</p>
           </div>
         </div>
